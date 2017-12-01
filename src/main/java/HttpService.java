@@ -33,7 +33,7 @@ public class HttpService {
         for(int i = 0; i < results.length(); i++){
             JSONObject objectInResult = results.getJSONObject(i);
 
-            place = new Place(objectInResult.getFloat("rating"),
+            place = new Place(objectInResult.optFloat("rating",0),
                               objectInResult.getString("name"));
             placeList.add(place);
         }
