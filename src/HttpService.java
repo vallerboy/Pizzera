@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class HttpService {
 
@@ -14,7 +15,15 @@ public class HttpService {
 
     }
 
-    public String makeHttpCall(String url){
+    public List<String> getNames(String query){
+        String response =  makeHttpCall(
+                "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query  +" &radius=500&types=food&name=cruise&key=AIzaSyCqBqE4ecsAIlPE-hHXnakh4Ykde3BCs6I");
+
+
+
+    }
+
+    private String makeHttpCall(String url){
         StringBuilder stringBuilder = new StringBuilder();
         try {
             HttpURLConnection httpURLConnection =
