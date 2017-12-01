@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HttpService {
@@ -19,21 +20,24 @@ public class HttpService {
 
     }
 
-    public List<String> getNames(String query){
+    public List<Place> getPlaces(String query){
         String response =  makeHttpCall(
                 "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query  +"&radius=500&types=food&name=cruise&key=AIzaSyCqBqE4ecsAIlPE-hHXnakh4Ykde3BCs6I");
+
+        List<Place> placeList = new ArrayList<>();
 
         JSONObject root = new JSONObject(response);
         JSONArray results = root.getJSONArray("results");
 
+        Place place;
         for(int i = 0; i < results.length(); i++){
             JSONObject objectInResult = results.getJSONObject(i);
 
-            System.out.println(objectInResult.getFloat("rating"));
-            System.out.println(objectInResult.getString("name"));
-            System.out.println();
+            place = new Place(objectInResult.getFloat("rating"),
+                              objectInResult.getString("name"));
+            placeList.add(place);
         }
-        return null;
+        return placeList;
     }
 
     private String makeHttpCall(String url){
