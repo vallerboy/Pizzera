@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,9 @@ public class Menu {
     }
 
     private void makeRequest(String query) {
-        List<Place> places = httpService.getPlaces(query);
+        List<Place> places = httpService.getPlaces(query, "");
+
+        System.out.println(places.size());
 
         Place place = places.get(0);
         for (Place place1 : places) {

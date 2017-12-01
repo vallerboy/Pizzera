@@ -19,15 +19,17 @@ public class HttpService {
     private HttpService(){
 
     }
+    private List<Place> placeList = new ArrayList<>();
+    public List<Place> getPlaces(String query, String pageToken){
 
-    public List<Place> getPlaces(String query){
         String response =  makeHttpCall(
-                "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query  +"&radius=500&types=food&name=cruise&key=AIzaSyCqBqE4ecsAIlPE-hHXnakh4Ykde3BCs6I");
+                "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query  +"&types=food&name=cruise&key=AIzaSyCqBqE4ecsAIlPE-hHXnakh4Ykde3BCs6I&pagetoken=" + pageToken);
 
-        List<Place> placeList = new ArrayList<>();
 
         JSONObject root = new JSONObject(response);
         JSONArray results = root.getJSONArray("results");
+
+        pageToken = root.optString("next_page_token", null);
 
         Place place;
         for(int i = 0; i < results.length(); i++){
@@ -37,7 +39,12 @@ public class HttpService {
                               objectInResult.getString("name"));
             placeList.add(place);
         }
-        return placeList;
+        if(pageToken != null) {
+            getPlaces(query, pageToken);
+        }else{
+            return placeList;
+        }
+        return null;
     }
 
     private String makeHttpCall(String url){
